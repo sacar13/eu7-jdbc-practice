@@ -6,6 +6,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
@@ -61,10 +62,42 @@ public class SpartanTestWithPath {
          assertEquals(name,"Lorenza");
          assertEquals(gender,"Female");
          assertEquals(phone,3312820936l);
+     }
+
+  @Test
+  public void getAllSpartanWithPath(){
+      Response response = given().accept(ContentType.JSON)
+              .when().get("/api/spartans");
+      assertEquals(response.statusCode(),200);
+      assertEquals(response.contentType(),"application/json");
+
+      int firstID = response.path("id[0]");
+      System.out.println("firstID = " + firstID);
+
+      String firstName = response.path("name[0]");
+      System.out.println("firstName = " + firstName);
+
+      String lastName = response.path("name[-1]");
+      System.out.println("lastName = " + lastName);
+
+      int lastID = response.path("id[-1]");
+      System.out.println("lastID = " + lastID);
+
+      System.out.println("================");
+      
+      //print all names of spartans
+      List<String> names = response.path("name");
+      System.out.println("names = " + names);
+
+      //print all phones of spartans
+      List<Object> phones = response.path("name");
+      for (Object phone : phones) {
+          System.out.println("phone = " + phone);
+      }
+
 
 
      }
-
-
+    
 
 }
